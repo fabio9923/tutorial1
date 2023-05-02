@@ -211,6 +211,11 @@ HRESULT InitDevice()
     return S_OK;
 }
 
+void DrawScreenWithColorIntensity(IDirect3DDevice9* pd3dDevice, float colorIntensity)
+{
+    // Limpia la pantalla con un color negro con la intensidad proporcionada
+    pd3dDevice->Clear(0, NULL, D3DCLEAR_TARGET, D3DCOLOR_XRGB(0, (int)(255 * colorIntensity), 0), 1.0f, 0);
+}
 
 //--------------------------------------------------------------------------------------
 // Render the frame
@@ -221,6 +226,24 @@ void Render()
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
     g_pd3dDevice->ClearRenderTargetView( g_pRenderTargetView, ClearColor );
     g_pSwapChain->Present( 0, 0 );
+
+    float colorIntensity = 0.0f;
+    float colorIncrement = 0.01f;
+    while (true)
+    {
+        // Llama a la función para dibujar en la pantalla con la intensidad de color actual
+        DrawScreenWithColorIntensity(pd3dDevice, colorIntensity);
+
+        // Actualiza la intensidad de color para la siguiente iteración del ciclo
+        colorIntensity += colorIncrement;
+
+        // Si hemos alcanzado la intensidad de color máxima, reinicia la intensidad y cambia la dirección del cambio de color
+        if (colorIntensity >= 1.0f || colorIntensity <= 0.0f)
+        {
+            colorIncrement = -colorIncrement;
+            colorIntensity = (colorIncrement > 0) ? 0.0f : 1.0f;
+        }
+    }
 }
 
 
@@ -235,5 +258,7 @@ void CleanupDevice()
     if( g_pSwapChain ) g_pSwapChain->Release();
     if( g_pd3dDevice ) g_pd3dDevice->Release();
 }
+
+
 
 
