@@ -224,7 +224,7 @@ void Render()
 {
     // Just clear the backbuffer
     float ClearColor[4] = { 0.0f, 0.125f, 0.3f, 1.0f }; //red,green,blue,alpha
-    g_pd3dDevice->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
+    g_pImmediateContext->ClearRenderTargetView(g_pRenderTargetView, ClearColor);
     g_pSwapChain->Present(0, 0);
 
     float colorIntensity = 0.0f;
@@ -258,6 +258,7 @@ void CleanupDevice()
     if (g_pSwapChain) g_pSwapChain->Release();
     if (g_pd3dDevice) g_pd3dDevice->Release();
 }
+
 
 
 
